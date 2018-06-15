@@ -1,0 +1,11 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: crawl rarbg",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/runner.py"
+        }
+    ]
+}
