@@ -6,7 +6,38 @@
 # https://doc.scrapy.org/en/latest/topics/spider-middleware.html
 
 from scrapy import signals
+import random
 
+PROXIES = [
+    {'ip_port': '106.39.179.244:80'},
+    {'ip_port': '65.52.223.99:80'},
+    {'ip_port': '1.52.248.207:3128'},
+    {'ip_port': '45.77.198.207:3128'},
+    {'ip_port': '177.125.119.16:8080'},
+    {'ip_port': '174.138.65.233:3128'}
+]
+
+
+class RandomUserAgent(object):
+    """Randomly rotate user agents based on a list of predefined ones"""
+
+    def __init__(self, agents):
+        self.agents = agents
+
+    @classmethod
+    def from_crawler(cls, crawler):
+        return cls(crawler.settings.getlist('USER_AGENTS'))
+
+    def process_request(self, request, spider):
+        # print "**************************" + random.choice(self.agents)
+        request.headers.setdefault('User-Agent', random.choice(self.agents))
+
+
+class ProxyMiddleware(object):
+    def process_request(self, request, spider):
+        proxy = random.choice(PROXIES)
+        print("**************ProxyMiddleware no pass************" + proxy['ip_port'])
+        request.meta['proxy'] = "http://%s" % proxy['ip_port']
 
 class CrawlerSpiderMiddleware(object):
     # Not all methods need to be defined. If a method is not defined,
